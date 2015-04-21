@@ -3,13 +3,18 @@
 
 %gprolog --init-goal "[projet],affiche_plateau([[[mais,ble],[ble,sucre]], [],[],[],[]]),halt"
 
-afficher_tas_marchandise([]):-nl.
-afficher_tas_marchandise([H|T]):-write(H),write(','),afficher_tas_marchandise(T).
+afficher_sous_liste([H|[]]):-write(H),nl.
+afficher_sous_liste([H|T]):-write(H),write(','),afficher_sous_liste(T).
 
-affiche_marchandise([H|T]):-write('tas:'),nl,afficher_tas_marchandise(H),nl,affiche_marchandise(T),nl.
+afficher_liste([]).
+afficher_liste([H|T]):-afficher_sous_liste(H),afficher_liste(T).
 
-affiche_plateau([Marchandises, Bourse, 
-        PositionTrader,ReserveJoueur1,ReserveJoueur2]):-
+affiche_plateau([M, B, PT, RJ1, RJ2]):-
     write('--MARCHANDISES--'),nl,
-    affiche_marchandise(Marchandises),
+    afficher_liste(M),nl,
+    write('--BOURSE--'),nl,
+    afficher_liste(B),nl,
+    write('POSITION:'),write(PT),nl,
+    write('RJ1:'),afficher_sous_liste(RJ1),
+    write('RJ2:'),afficher_sous_liste(RJ2),
     nl.
