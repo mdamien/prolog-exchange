@@ -1,20 +1,33 @@
-%affiche_plateau(+Plateau)
-%affiche_plateau([[[mais,ble],[ble,sucre]], [1,2],[],[],[]]).
+gPlateauTest([[[mais,ble],[ble,sucre]], [[mais,1],[ble,2]],1,[ble,ble],[sucre,sucre]]).
 
-%gprolog --init-goal "[projet],affiche_plateau([[[mais,ble],[ble,sucre]], [],[],[],[]]),halt"
+%gprolog --init-goal "[projet],gPlateauTest(Y),affiche_plateau(Y),halt"
 
-afficher_sous_liste([H|[]]):-write(H),nl.
+afficher_sous_liste([H|[]]):-write(H).
 afficher_sous_liste([H|T]):-write(H),write(','),afficher_sous_liste(T).
 
 afficher_liste([]).
-afficher_liste([H|T]):-afficher_sous_liste(H),afficher_liste(T).
+afficher_liste([H|T]):-afficher_sous_liste(H),nl,afficher_liste(T).
+
+afficher_val_bourse([P,V]):-write(V),write(' | '),write(P).
+
+afficher_bourse([]).
+afficher_bourse([H|T]):-write('| '),afficher_val_bourse(H),nl,afficher_bourse(T).
+
+afficher_pos(P,P):-write('  <- Trader'),nl.
+afficher_pos(_,_).
+
+afficher_marchs([],_,_).
+afficher_marchs([H|T],P,I):-write(I),write(': '),afficher_sous_liste(H),afficher_pos(P,I),nl,J is I+1,afficher_marchs(T,P,J).
 
 affiche_plateau([M, B, PT, RJ1, RJ2]):-
-    write('--MARCHANDISES--'),nl,
-    afficher_liste(M),nl,
+    write('    J1'),nl,
+    write('  '),afficher_sous_liste(RJ1),nl,nl,
+    write('-------------------------'),nl,nl,
+    afficher_marchs(M,PT,0),
+    write('-------------------------'),nl,nl,
     write('--BOURSE--'),nl,
-    afficher_liste(B),nl,
-    write('POSITION:'),write(PT),nl,
-    write('RJ1:'),afficher_sous_liste(RJ1),
-    write('RJ2:'),afficher_sous_liste(RJ2),
+    afficher_bourse(B),nl,
+    write('    J2'),nl,
+    write('  '),afficher_sous_liste(RJ2),
+    nl,
     nl.
