@@ -1,7 +1,9 @@
-gPlateauTest([[[mais,ble],[ble,sucre]], [[mais,1],[ble,2]],1,[ble,ble],[sucre,sucre]]).
+%gprolog --init-goal "[affichage],gPlateauTest(Y),affiche_plateau(Y),halt"
+gPlateauTest([
+    [[mais,ble],[ble,sucre]],[[mais,1],[ble,2]],
+    [1,9],[ble,ble],[sucre,sucre]]).
 
-%gprolog --init-goal "[projet],gPlateauTest(Y),affiche_plateau(Y),halt"
-
+afficher_sous_liste([]).
 afficher_sous_liste([H|[]]):-write(H).
 afficher_sous_liste([H|T]):-write(H),write(','),afficher_sous_liste(T).
 

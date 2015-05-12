@@ -48,3 +48,5 @@ tri([H|L],R):-
     tri(Inf,InfTriee),
     tri(Sup,SupTriee),
     concat(InfTriee,[H|InfPlusX]).
+
+
