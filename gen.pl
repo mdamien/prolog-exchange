@@ -52,13 +52,13 @@ elem_rand([H|T],Y) :-
 %%% Génération du trader %%%
 %gen_trader(?Position)
 %Génère la position du trader en début de partie
-gen_trader([X,9]) :-
+gen_trader(X) :-
 	random(1,9,X).
 
 %%% Génération du plateau %%%
 %gen_plateau(?Plateau)
 %Retourne la structure plateau initialisée
 gen_plateau([March,Bourse,Trader,[],[]]) :-
-	fMarchInit(March),
-	fBourseInit(Bourse),
+	march_init(March),
+	bourse_init(Bourse),
 	gen_trader(Trader).
