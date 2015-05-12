@@ -1,6 +1,6 @@
 %Prochain TP le 19-05 puis 02-06 puis le 16-06
 
-%gprolog --init-goal "[gen],[affichage],gen_plateau(Y),write(Y),halt"
+%gprolog --init-goal "[gen],[affichage],gen_plateau(Y),write(Y),nl,affiche_plateau(Y),halt"
 
 %Variables globales
 gBourseInitial([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
