@@ -1,18 +1,12 @@
 %Prochain TP le 19-05 puis 02-06 puis le 16-06
+
+%gprolog --init-goal "[gen],[affichage],gen_plateau(Y),write(Y),halt"
+
 %Variables globales
-min(0).
-max(6).
+gBourseInitial([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
 
-
-%%% Génération de la bourse %%%
-%bourse_init(?Bourse)
-%Génère la bourse en début de partie
-bourse_init([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
-
-
-%%% Génération des marchandises %%%
 %march_init(?Marchandises)
-%Génère toutes les marchandises en début de partie.
+%Génère toutes les marchandises
 march_init([A,B,C,D,E,F,G,H,I]) :-
 	pile_init(A),
 	pile_init(B),
@@ -52,13 +46,13 @@ elem_rand([H|T],Y) :-
 %%% Génération du trader %%%
 %gen_trader(?Position)
 %Génère la position du trader en début de partie
-gen_trader([X,9]) :-
+gen_trader(X) :-
 	random(1,9,X).
 
 %%% Génération du plateau %%%
 %gen_plateau(?Plateau)
-%Retourne la structure plateau initialisée
+%Retourne la structure plateau initialisée M, B, PT, RJ1, RJ2
 gen_plateau([March,Bourse,Trader,[],[]]) :-
-	fMarchInit(March),
-	fBourseInit(Bourse),
+	march_init(March),
+	gBourseInitial(Bourse),
 	gen_trader(Trader).
