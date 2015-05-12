@@ -54,9 +54,5 @@ gen_trader(X) :-
 %Retourne la structure plateau initialisée M, B, PT, RJ1, RJ2
 gen_plateau([March,Bourse,Trader,[],[]]) :-
 	march_init(March),
-<<<<<<< HEAD
-	bourse_init(Bourse),
-=======
 	gBourseInitial(Bourse),
->>>>>>> 4341d52b89466d0b98a0e684afd582948796d1d4
 	gen_trader(Trader).
