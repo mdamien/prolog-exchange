@@ -1,74 +1,64 @@
+%Prochain TP le 19-05 puis 02-06 puis le 16-06
 %Variables globales
 min(0).
 max(6).
 
 
 %%% Génération de la bourse %%%
-%fBourseInit(?Bourse)
+%bourse_init(?Bourse)
 %Génère la bourse en début de partie
-fBourseInit([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
+bourse_init([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
 
 
 %%% Génération des marchandises %%%
-%fMarchInit(?Marchandises)
+%march_init(?Marchandises)
 %Génère toutes les marchandises en début de partie.
-fMarchInit([A,B,C,D,E,F,G,H,I]) :-
-	fPileInit(A),
-	fPileInit(B),
-	fPileInit(C),
-	fPileInit(D),
-	fPileInit(E),
-	fPileInit(F),
-	fPileInit(G),
-	fPileInit(H),
-	fPileInit(I).
+march_init([A,B,C,D,E,F,G,H,I]) :-
+	pile_init(A),
+	pile_init(B),
+	pile_init(C),
+	pile_init(D),
+	pile_init(E),
+	pile_init(F),
+	pile_init(G),
+	pile_init(H),
+	pile_init(I).
 	
-%fPileInit(?Pile)
+%pile_init(?Pile)
 %Génère une pile de 4 élements de marchandise
-fPileInit([A,B,C,D]) :- 
+pile_init([A,B,C,D]) :- 
 	gen_elem(A),
 	gen_elem(B),
 	gen_elem(C),
 	gen_elem(D).
 
-%fGenElem(?Element)
+%gen_elem(?Element)
 %Retourne un élément de marchandise au hasard
-fGenElem(X) :- 
-	elemRand([ble,riz,cacao,cafe,sucre,mais], X).
+gen_elem(X) :- 
+	elem_rand([ble,riz,cacao,cafe,sucre,mais], X).
 
-%elemRand(+Enum,?Elem)
+%elem_rand(+Enum,?Elem)
 %Prend une liste similaire à une énumération et retourne un élément au hasard
 %On utilise la fonction elem pour obtenir le ième élément
 elem([H|_],1,H).
 elem([_|T],N,E):-
 	X is N-1,elem(T,X,E).
 
-elemRand([H|T],Y) :-
+elem_rand([H|T],Y) :-
 	random(1,6,Num),
 	elem([H|T],Num,Y).
 
 
 %%% Génération du trader %%%
-%fGenTrader(?Position)
+%gen_trader(?Position)
 %Génère la position du trader en début de partie
-fGenTrader([X,9]) :-
+gen_trader([X,9]) :-
 	random(1,9,X).
 
 %%% Génération du plateau %%%
-%fGenPlateau(?Plateau)
+%gen_plateau(?Plateau)
 %Retourne la structure plateau initialisée
-fGenPlateau([March,Bourse,Trader,[],[]]) :-
+gen_plateau([March,Bourse,Trader,[],[]]) :-
 	fMarchInit(March),
 	fBourseInit(Bourse),
-	fGenTrader(Trader).
-
-
-%gen_bourse_one(_,0,R).
-%gen_bourse_one([Type,Limit],N,-R):-
-%    write(Type),write(' :'),
-%    random(0,Limit,Q),write(Q),nl,
-%    Nm is N-1,
-%    gen_bourse_one([Type,Limit],Nm,-R).
-
-%gen_bourse([],X).
-%gen_bourse([H|T],X):-gen_bourse_one(H,R),gen_bourse(T,[R|X]).
+	gen_trader(Trader).
