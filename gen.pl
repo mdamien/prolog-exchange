@@ -1,6 +1,6 @@
 %Prochain TP le 19-05 puis 02-06 puis le 16-06
 
-%gprolog --init-goal "[gen],[affichage],gen_plateau(Y),write(Y),nl,affiche_plateau(Y),halt"
+%gprolog --init-goal "[gen],[affichage],depart_plateau(Y),write(Y),nl,affiche_plateau(Y),halt"
 
 %Variables globales
 gBourseInitial([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
@@ -52,7 +52,9 @@ gen_trader(X) :-
 %%% Génération du plateau %%%
 %gen_plateau(?Plateau)
 %Retourne la structure plateau initialisée M, B, PT, RJ1, RJ2
-gen_plateau([March,Bourse,Trader,[],[]]) :-
+plateau_depart([March,Bourse,Trader,[],[]]) :-
+	%user_time(TS),
+	%set_seed(TS),
 	march_init(March),
 	gBourseInitial(Bourse),
 	gen_trader(Trader).

@@ -15,7 +15,7 @@ afficher_val_bourse([P,V]):-write(V),write(' | '),write(P).
 afficher_bourse([]).
 afficher_bourse([H|T]):-write('| '),afficher_val_bourse(H),nl,afficher_bourse(T).
 
-afficher_pos(P,P):-write('  <- Trader'),nl.
+afficher_pos(P,P):-write('   <----------- Trader').
 afficher_pos(_,_).
 
 afficher_marchs([],_,_).
@@ -32,4 +32,4 @@ affiche_plateau([M, B, PT, RJ1, RJ2]):-
     write('    J2'),nl,
     write('  '),afficher_sous_liste(RJ2),
     nl,
-    nl.
+    nl,!.
