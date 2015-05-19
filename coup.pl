@@ -17,12 +17,39 @@ coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]):-
 
 %jouer_coup(+PlateauInitial, ?Coup, ?NouveauPlateau)
 jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrader,NJ1,NJ2]) :-
-	%appart([NPos
 	NJ1 is J1,	
 	NJ2 is J2,
-	NTrader = Trader+Move, %Il faut le faire revenir au début si ça déborde
-
+	bouger_trader(March,Trader,Move,NTrader),
+	add_to_player(Keep,J,J1,J2,NJ1,NJ2),
 	add(Old,Keep,New).	
+
+%bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
+bouger_trader(March,OldT,Move,NewT) :-
+	Tmp is OldT+Move,
+	length(March,L),
+	X is Tmp-L,
+	overflow(X,Tmp,R),
+	NewT is R.
+
+overflow(X,Y,R) :- 
+	X>0,
+	R is X,
+	!.
+
+overflow(X,Tmp,R) :-
+	R is Tmp.
+
+%add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2)
+add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
+	J == "j1",
+	NJ1 = [Keep|J1],
+	NJ2 = J2,
+	!.
+
+add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
+	J == "j2",
+	NJ2 = [Keep|J2],
+	NJ1 = J1.
 
 %ajoute
 add(Old,Keep,[Keep|Old]).
