@@ -25,7 +25,7 @@ affiche_plateau([M, B, PT, RJ1, RJ2]):-
     write('    J1'),nl,
     write('  '),afficher_sous_liste(RJ1),nl,nl,
     write('-------------------------'),nl,nl,
-    afficher_marchs(M,PT,0),
+    afficher_marchs(M,PT,1),
     write('-------------------------'),nl,nl,
     write('--BOURSE--'),nl,
     afficher_bourse(B),nl,

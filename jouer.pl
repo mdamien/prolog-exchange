@@ -16,17 +16,36 @@ jouer:-
     plateau_depart(P),
     tour(j1,P).
 
+top_pile(Index,M,Top):-
+    nth(Index,M,Pile),
+    last(Pile,Top).
+
+choix([M,_,Trader,_,_],Choix1,Choix2):-
+    P1 is Trader-1,
+    P2 is Trader+1,
+    top_pile(P1,M,Choix1),
+    top_pile(P2,M,Choix2).
+
 tour(J,P):-
     cls,
     affiche_plateau(P),
+
     write('TOUR DE '),write(J),nl,
     write('Avancer de combien ? '),
     entrer_nombre(Depl),
     write('avance de '),write(Depl),nl,
-    write('Que prendre entre xxx et yyy ? '),
+    %avancer()
+    choix(P,Choix1,Choix2),
+
+    write('Que prendre entre '),
+    write(Choix1),
+    write(' et '),
+    write(Choix2),
+    write(' ? '),
+
     read(Choix),
-    write(J),write(' avance de '),write(Depl),write('et prend '),write(Choix),nl,
-    %jouer_coup(J, Depl, Choix, P),
+    write(J),write('prend '),write(Choix),nl,
+    %prendre dans pile()
     joueur_suivant(J,Jsuivant),
     tour(Jsuivant, P),
     !.
