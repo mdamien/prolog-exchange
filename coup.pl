@@ -25,19 +25,21 @@ jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrade
 
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
 bouger_trader(March,OldT,Move,NewT) :-
-	Tmp is OldT+Move,
+	X is OldT+Move,
 	length(March,L),
-	X is Tmp-L,
-	overflow(X,Tmp,R),
+	%X is X-L,
+	overflow(X,L,R),
 	NewT is R.
 
-overflow(X,Y,R) :- 
-	X>0,
-	R is X,
+overflow(X,L,R) :- 
+	Y is X-L, 
+	Y>0,
+	%R is Y,
+	overflow(Y,L,R),
 	!.
 
-overflow(X,Tmp,R) :-
-	R is Tmp.
+overflow(X,L,R) :-
+	R is X.
 
 %add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2)
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
