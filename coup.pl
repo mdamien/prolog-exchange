@@ -13,6 +13,8 @@ coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
     bouger_trader(M,P,D,NewT),
     choix(M,NewT,Drop,Keep).
 
+%coups_possibles(+Plateau,?ListeCoupPossible)
+
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
 %jouer_coup(+PlateauInitial, ?Coup, ?NouveauPlateau)
 jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrader,NJ1,NJ2]) :-
