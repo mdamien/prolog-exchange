@@ -32,4 +32,5 @@ affiche_plateau([M, B, PT, RJ1, RJ2]):-
     write('    J2'),nl,
     write('  '),afficher_sous_liste(RJ2),
     nl,
+    write('Trader P:'),write(PT),nl,
     nl,!.
