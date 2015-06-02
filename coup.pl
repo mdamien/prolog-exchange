@@ -43,13 +43,13 @@ overflow(X,L,R) :-
 %%%%%% Ajouter une marchandise à un joueur %%%%%%
 %add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2)
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
-	J == "j1",
+	J == 'j1',
 	NJ1 = [Keep|J1],
 	NJ2 = J2,
 	!.
 
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
-	J == "j2",
+	J == 'j2',
 	NJ2 = [Keep|J2],
 	NJ1 = J1.
 

@@ -17,20 +17,17 @@ jouer:-
     tour('j1',P).
 
 top_pile(Index,M,Top):-
-    nth(Index,M,Pile),
-    last(Pile,Top).
+    nth(Index,M,[Top|_]).
 
+%retourne les sommets des deux piles autour du joueur
 choix(M,Trader,Choix1,Choix2):-
     bouger_trader(M, Trader, -1, P1),
     bouger_trader(M, Trader, 1, P2),
     top_pile(P1,M,Choix1),
     top_pile(P2,M,Choix2).
 
-avancer_mod(P, D, M, NextP):-
-    NextP0 is P+D,
-    len(M,Mlen),
-    MlenPlus1 is Mlen + 1,
-    NextP is NextP0 mod MlenPlus1.
+choix_fait(Choix1, Choix2, Choix1, Choix2).
+choix_fait(Choix1, Choix2, Choix2, Choix1).
 
 tour(J,[M, B, Trader, RJ1, RJ2]):-
     cls,
@@ -54,8 +51,9 @@ tour(J,[M, B, Trader, RJ1, RJ2]):-
     write(' ? '),
 
     read(Choix),
+    choix_fait(Choix1,Choix2,Choix, ChoixDrop),
     write(J),write('prend '),write(Choix),nl,
-    %jouer_coup([M, B, Trader, RJ1, RJ2], [J,Depl,Choix,Choix], NouveauPlateau)
+    jouer_coup([M, B, Trader, RJ1, RJ2], [J,Depl,Choix,ChoixDrop], NouveauPlateau),
     joueur_suivant(J,Jsuivant),
     tour(Jsuivant, NouveauPlateau),
     !.

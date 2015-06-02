@@ -19,7 +19,13 @@ afficher_pos(P,P):-write('   <----------- Trader').
 afficher_pos(_,_).
 
 afficher_marchs([],_,_).
-afficher_marchs([H|T],P,I):-write(I),write(': '),afficher_sous_liste(H),afficher_pos(P,I),nl,J is I+1,afficher_marchs(T,P,J).
+afficher_marchs([[H1|HR]|T],P,I):-write(I),write(': '),
+    write(H1),
+    write('   ['),
+    afficher_sous_liste(HR),
+    write(']'),
+    afficher_pos(P,I),
+    nl,J is I+1,afficher_marchs(T,P,J).
 
 affiche_plateau([M, B, PT, RJ1, RJ2]):-
     write('    J1'),nl,
