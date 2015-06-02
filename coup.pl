@@ -2,16 +2,16 @@ len([],0).
 len([_|T],N):-len(T,N2),N is N2 + 1.
 
 %coup_possible(+Plateau,?Coup)
-coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]):-
-    write('D'),write(D),nl,
+coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
     D > 0, D < 4,
-    write('D ok'),nl,
-    NextPTFull = P+D,
-    write('new PT'),write(NextPT),nl,
-    len(M,Mlen),write(Mlen),nl,
-    NextPT = NextPTFull mod Mlen,
-    write(Mlen),nl,
-    write('deplacement ok'),nl.
+    bouger_trader(M,P,D,NewT),
+    choix(M,NewT,Keep,Drop),
+    !.
+
+coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
+	D > 0, D < 4,
+    bouger_trader(M,P,D,NewT),
+    choix(M,NewT,Drop,Keep).
 
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
 %jouer_coup(+PlateauInitial, ?Coup, ?NouveauPlateau)
