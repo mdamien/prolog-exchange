@@ -22,7 +22,8 @@ afficher_marchs([],_,_).
 afficher_marchs([[H1|HR]|T],P,I):-write(I),write(': '),
     write(H1),
     write('   ['),
-    afficher_sous_liste(HR),
+    length([H1|HR],N),
+    write(N),
     write(']'),
     afficher_pos(P,I),
     nl,J is I+1,afficher_marchs(T,P,J).

@@ -20,7 +20,7 @@ top_pile(Index,M,Top):-
     nth(Index,M,[Top|_]).
 
 %retourne les sommets des deux piles autour du joueur
-choix(M,Trader,Choix1, P1, Choix2, P2):-
+choix(M,Trader,Choix1, Choix2):-
     bouger_trader(M, Trader, -1, P1),
     bouger_trader(M, Trader, 1, P2),
     top_pile(P1,M,Choix1),
