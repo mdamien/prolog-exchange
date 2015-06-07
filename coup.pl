@@ -1,6 +1,4 @@
-len([],0).
-len([_|T],N):-len(T,N2),N is N2 + 1.
-
+%%%%%%%%%%%%%%%%%% Calcul de coups %%%%%%%%%%%%%%%%%%
 %coup_possible(+Plateau,?Coup)
 coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
     D > 0, D < 4,
@@ -14,35 +12,35 @@ coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
     choix(M,NewT,Drop,Keep).
 
 %coups_possibles(+Plateau,?ListeCoupPossible)
+coups_possibles([M, B, P, RJ1, RJ2],[C1,C2,C3,C4,C5,C6]) :-
+	coup_possible([M, B, P, RJ1, RJ2],[J,1,O1,O2]),
+	C1 = [J,1,O1,O2],
+	C2 = [J,1,O2,O1],
+	coup_possible([M, B, P, RJ1, RJ2],[J,2,O3,O4]),
+	C3 = [J,2,O3,O4],
+	C4 = [J,2,O4,O3],	
+	coup_possible([M, B, P, RJ1, RJ2],[J,3,O5,O6]),
+	C5 = [J,3,O5,O6],
+	C6 = [J,3,O6,O5].
 
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
-%jouer_coup(+PlateauInitial, ?Coup, ?NouveauPlateau)
+%jouer_coup(+PlateauInitial, +Coup, ?NouveauPlateau)
+%Le coup qui est passé en entrée doit être valide.
 jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrader,NJ1,NJ2]) :-
 	bouger_trader(March,Trader,Move,NTrader),
 	add_to_player(Keep,J,J1,J2,NJ1,NJ2),
 	remove_items(March,NTrader,NMarch),
 	downgrade(Bourse,Drop,NBourse).	
 
-%%%%%% Mouvement du trader %%%%%%
+%%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
 bouger_trader(March,OldT,Move,NewT) :-
 	X is OldT+Move,
 	length(March,L),
-	%X is X-L,
 	overflow(X,L,R),
 	NewT is R.
 
-%overflow(+Position,+LongueurPlateau,?PositionModuloLongueur)
-overflow(X,L,R) :- 
-	Y is X-L, 
-	Y>0,
-	%R is Y,
-	overflow(Y,L,R),
-	!.
-overflow(X,L,R) :-
-	R is X.
-
-%%%%%% Ajouter une marchandise à un joueur %%%%%%
+%%%%%%%%%%%%%%%%%% Ajouter une marchandise à un joueur %%%%%%%%%%%%%%%%%%
 %add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2)
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
 	J == 'j1',
@@ -55,7 +53,7 @@ add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
 	NJ2 = [Keep|J2],
 	NJ1 = J1.
 
-%%%%%% Retrait des 2 items de la liste Marchandise %%%%%%
+%%%%%%%%%%%%%%%%%% Retrait des 2 items %%%%%%%%%%%%%%%%%%
 %remove_items(+Marchandises,+NewPosTrader,?NewMarchandises)
 remove_items(March,Trader,NMarch) :-
 	length(March,L),
@@ -68,6 +66,7 @@ remove_items(March,Trader,NMarch) :-
 	clear_empty(TmpMarch2,NMarch).
 
 %remove(Marchandises,Position,NewMarchandises)
+%Retire l'élément en haut de la pile indiquée par Position
 remove([H|T],1,R) :-
 	remove_top(H,X),
 	concat([X],T,R),
@@ -77,8 +76,31 @@ remove([H|T],Pos,NMarch) :-
 	remove(T,NPos,R),
 	concat([H],R,NMarch),
 	!.
+%Retire le premier élément d'une liste
 remove_top([H|T],T).
 
+%%%%%%%%%%%%%%%%%% Dévaluation %%%%%%%%%%%%%%%%%%
+%downgrade(Bourse,Drop,NBourse)
+downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
+	Val>0, %Voir si ça marche bien quand un produit est à zéro
+	NVal is Val-1,
+	!.
+downgrade([H|T],Drop,R) :-
+	downgrade(T,Drop,Tmp),
+	concat([H],Tmp,R),
+	!.
+
+%%%%%%%%%%%%%%%%%% Tools %%%%%%%%%%%%%%%%%%
+%overflow(+Position,+LongueurPlateau,?PositionModuloLongueur)
+overflow(X,L,R) :- 
+	Y is X-L, 
+	Y>0,
+	overflow(Y,L,R),
+	!.
+overflow(X,L,R) :-
+	R is X.
+
+%Supprime une sous-liste lorsque celle-ci est vide
 clear_empty([[]|T],T).
 clear_empty([],[]).
 clear_empty([H|T],NMarch) :-
@@ -95,18 +117,7 @@ backflow(X,L,X).
 concat([],L,L).
 concat([H|T],L,[H|X]):- concat(T,L,X).
 
-
-%%%%%% Dévaluation %%%%%%
-%downgrade(Bourse,Drop,NBourse)
-downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
-	Val>0, %Voir si ça marche bien quand un produit est à zéro
-	NVal is Val-1,
-	!.
-downgrade([H|T],Drop,R) :-
-	downgrade(T,Drop,Tmp),
-	concat([H],Tmp,R),
-	!.
-
-
+len([],0).
+len([_|T],N):-len(T,N2),N is N2 + 1.
 %%%%%%%% Pour les tests %%%%%%%%
 %jouer_coup([[[ble,riz],[mais,cacao,sucre],[cafe,mais],[riz],[sucre,mais,cafe,cacao]],[[ble,7],[riz,6],[cacao,5],[cafe,6],[sucre,6],[mais,6]],3,[ble,ble,cacao],[sucre,cacao,mais]],[j1,2,ble,riz],[M,B,T,J1,J2]).
