@@ -11,17 +11,17 @@ coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
     bouger_trader(M,P,D,NewT),
     choix(M,NewT,Drop,Keep).
 
-%coups_possibles(+Plateau,+Joueur, ?ListeCoupPossible)
-coups_possibles([M, B, P, RJ1, RJ2], J, [C1,C2,C3,C4,C5,C6]) :-
-	coup_possible([M, B, P, RJ1, RJ2],[J,1,O1,O2]),
-	C1 = [J,1,O1,O2],
-	C2 = [J,1,O2,O1],
-	coup_possible([M, B, P, RJ1, RJ2],[J,2,O3,O4]),
-	C3 = [J,2,O3,O4],
-	C4 = [J,2,O4,O3],	
-	coup_possible([M, B, P, RJ1, RJ2],[J,3,O5,O6]),
-	C5 = [J,3,O5,O6],
-	C6 = [J,3,O6,O5].
+%coups_possibles(+Plateau, ?ListeCoups)
+coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
+	coup_possible([M, B, P, RJ1, RJ2],[_,1,O1,O2]),
+	C1 = [_,1,O1,O2],
+	C2 = [_,1,O2,O1],
+	coup_possible([M, B, P, RJ1, RJ2],[_,2,O3,O4]),
+	C3 = [_,2,O3,O4],
+	C4 = [_,2,O4,O3],	
+	coup_possible([M, B, P, RJ1, RJ2],[_,3,O5,O6]),
+	C5 = [_,3,O5,O6],
+	C6 = [_,3,O6,O5].
 
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
 %jouer_coup(+PlateauInitial, +Coup, ?NouveauPlateau)
