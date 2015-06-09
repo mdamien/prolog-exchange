@@ -1,18 +1,18 @@
 %%%%%%%%%%%%%%%%%% Calcul de coups %%%%%%%%%%%%%%%%%%
 %coup_possible(+Plateau,?Coup)
-coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
+coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
     D > 0, D < 4,
     bouger_trader(M,P,D,NewT),
     choix(M,NewT,Keep,Drop),
     !.
 
-coup_possible([M, B, P, RJ1, RJ2], [J,D,Keep,Drop]) :-
+coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
 	D > 0, D < 4,
     bouger_trader(M,P,D,NewT),
     choix(M,NewT,Drop,Keep).
 
-%coups_possibles(+Plateau,?ListeCoupPossible)
-coups_possibles([M, B, P, RJ1, RJ2],[C1,C2,C3,C4,C5,C6]) :-
+%coups_possibles(+Plateau,+Joueur, ?ListeCoupPossible)
+coups_possibles([M, B, P, RJ1, RJ2], J, [C1,C2,C3,C4,C5,C6]) :-
 	coup_possible([M, B, P, RJ1, RJ2],[J,1,O1,O2]),
 	C1 = [J,1,O1,O2],
 	C2 = [J,1,O2,O1],
@@ -77,7 +77,7 @@ remove([H|T],Pos,NMarch) :-
 	concat([H],R,NMarch),
 	!.
 %Retire le premier élément d'une liste
-remove_top([H|T],T).
+remove_top([_|T],T).
 
 %%%%%%%%%%%%%%%%%% Dévaluation %%%%%%%%%%%%%%%%%%
 %downgrade(Bourse,Drop,NBourse)
@@ -85,6 +85,7 @@ downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
 	Val>0, %Voir si ça marche bien quand un produit est à zéro
 	NVal is Val-1,
 	!.
+
 downgrade([H|T],Drop,R) :-
 	downgrade(T,Drop,Tmp),
 	concat([H],Tmp,R),
@@ -97,7 +98,7 @@ overflow(X,L,R) :-
 	Y>0,
 	overflow(Y,L,R),
 	!.
-overflow(X,L,R) :-
+overflow(X,_,R) :-
 	R is X.
 
 %Supprime une sous-liste lorsque celle-ci est vide
@@ -112,7 +113,7 @@ backflow(X,L,Y) :-
 	X=<0,
 	Y is L,
 	!.
-backflow(X,L,X).
+backflow(X,_,X).
 
 concat([],L,L).
 concat([H|T],L,[H|X]):- concat(T,L,X).

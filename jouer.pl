@@ -30,18 +30,25 @@ choix_fait(Choix1, Choix2, Choix1, Choix2).
 choix_fait(Choix1, Choix2, Choix2, Choix1).
 
 tour(J,[M, B, Trader, RJ1, RJ2]):-
+
+
     cls,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
 
     write('TOUR DE '),write(J),nl,
+
+    coups_possibles([M, B, Trader, RJ1, RJ2], J, CoupsPossibles),
+    write('Coups possibles:'),write(CoupsPossibles),nl,
+
     write('Avancer de combien ? '),
     entrer_nombre(Depl),
     write('avance de '),write(Depl),nl,
     %avancer()
     bouger_trader(M,Trader,Depl,TraderPred),
+
+
     cls,
     choix(M, TraderPred, Choix1,Choix2),
-
     affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
     write('TOUR DE '),write(J),nl,
     write('Que prendre entre '),
