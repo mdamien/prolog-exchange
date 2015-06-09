@@ -1,15 +1,28 @@
+top_pile(Index,M,Top):-
+    nth(Index,M,[Top|_]).
+
+getM([M, _, _, _, _],M).
+getP([_, _, P, _, _],P).
+
+%retourne les sommets des deux piles autour du joueur
+choix(M,Trader,Choix1, Choix2):-
+	length(M, L),
+	Pmin1 = Trader+L,
+	Pmin2 = Pmin1-1, %TODO remove this hack
+    bouger_trader(M, Trader, Pmin2, P1),
+    bouger_trader(M, Trader, 1, P2),
+    top_pile(P1, M, Choix1),
+    top_pile(P2, M, Choix2).
+
 %%%%%%%%%%%%%%%%%% Calcul de coups %%%%%%%%%%%%%%%%%%
 %coup_possible(+Plateau,?Coup)
 coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
     D > 0, D < 4,
+	write('D = '),write(D),nl,
     bouger_trader(M,P,D,NewT),
+    write('NewT = '),write(NewT),nl,
     choix(M,NewT,Keep,Drop),
     !.
-
-coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
-	D > 0, D < 4,
-    bouger_trader(M,P,D,NewT),
-    choix(M,NewT,Drop,Keep).
 
 %coups_possibles(+Plateau, ?ListeCoups)
 coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
@@ -98,8 +111,7 @@ overflow(X,L,R) :-
 	Y>0,
 	overflow(Y,L,R),
 	!.
-overflow(X,_,R) :-
-	R is X.
+overflow(R,_,R).
 
 %Supprime une sous-liste lorsque celle-ci est vide
 clear_empty([[]|T],T).

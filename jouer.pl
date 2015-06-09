@@ -28,16 +28,6 @@ jouer_h_vs_ia:-
     plateau_depart(P),
     tour('j1',P,'Humain','IA').
 
-top_pile(Index,M,Top):-
-    nth(Index,M,[Top|_]).
-
-%retourne les sommets des deux piles autour du joueur
-choix(M,Trader,Choix1, Choix2):-
-    bouger_trader(M, Trader, -1, P1),
-    bouger_trader(M, Trader, 1, P2),
-    top_pile(P1,M,Choix1),
-    top_pile(P2,M,Choix2).
-
 choix_fait(Choix1, Choix2, Choix1, Choix2).
 choix_fait(Choix1, Choix2, Choix2, Choix1).
 
@@ -55,6 +45,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role):-
     write('- et de laisser -'),write(Drop),write('- '),nl,
     jouer_coup([M, B, Trader, RJ1, RJ2], [J,D,Keep,Drop], NouveauPlateau),
     joueur_suivant(J,Jsuivant),
+    affiche_plateau([M, B, Trader, RJ1, RJ2]),nl,
     tour(Jsuivant, NouveauPlateau, J1role, J2role),
     nl.
 

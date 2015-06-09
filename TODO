@@ -1,3 +1,8 @@
 distribution egales des marchandises
 minimax
 fin de jeu
+
+add test suite
+ - modulo with -1
+ - ai vs ai finish
+ - ...
