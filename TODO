@@ -2,7 +2,15 @@ distribution egales des marchandises
 minimax
 fin de jeu
 
+FUN
+===
+
 add test suite
  - modulo with -1
  - ai vs ai finish
  - ...
+
+- clean code (coups_possible, overflow, commentaires)
+
+parties a plus de 2 joueurs
+stats de combats ai random, minimax, minimax avec elagage, différente depth

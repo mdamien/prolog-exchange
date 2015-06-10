@@ -134,3 +134,7 @@ len([],0).
 len([_|T],N):-len(T,N2),N is N2 + 1.
 %%%%%%%% Pour les tests %%%%%%%%
 %jouer_coup([[[ble,riz],[mais,cacao,sucre],[cafe,mais],[riz],[sucre,mais,cafe,cacao]],[[ble,7],[riz,6],[cacao,5],[cafe,6],[sucre,6],[mais,6]],3,[ble,ble,cacao],[sucre,cacao,mais]],[j1,2,ble,riz],[M,B,T,J1,J2]).
+
+
+fin_jeu(M) :- length(M,L), L < 3.
+score(Reserve, Bourse, 42).
