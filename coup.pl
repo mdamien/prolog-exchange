@@ -138,5 +138,14 @@ len([_|T],N):-len(T,N2),N is N2 + 1.
 %jouer_coup([[[ble,riz],[mais,cacao,sucre],[cafe,mais],[riz],[sucre,mais,cafe,cacao]],[[ble,7],[riz,6],[cacao,5],[cafe,6],[sucre,6],[mais,6]],3,[ble,ble,cacao],[sucre,cacao,mais]],[j1,2,ble,riz],[M,B,T,J1,J2]).
 
 
+bourse_val([[K,V]|_], K, V):- !.
+bourse_val([_|T], K, V):-
+	bourse_val(T, K, V).
+
 fin_jeu(M) :- length(M,L), L < 3.
-score(Reserve, Bourse, 42).
+
+score([], _, 0).
+score([H|T], Bourse, Points):-
+	bourse_val(Bourse, H, Pts),
+	score(T, Bourse, AutresPts),
+	Points is (Pts + AutresPts).
