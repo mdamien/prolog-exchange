@@ -34,13 +34,17 @@ coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
 	C5 = [_,3,O5,O6],
 	C6 = [_,3,O6,O5].
 
+remove_empty_items(In,Out):-
+	select([],In,Out);Out = In.
+
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
 %jouer_coup(+PlateauInitial, +Coup, ?NouveauPlateau)
 %Le coup qui est passé en entrée doit être valide.
 jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrader,NJ1,NJ2]) :-
 	bouger_trader(March,Trader,Move,NTrader),
 	add_to_player(Keep,J,J1,J2,NJ1,NJ2),
-	remove_items(March,NTrader,NMarch),
+	remove_items(March,NTrader,NMarchPlusVide),
+	remove_empty_items(NMarchPlusVide,NMarch),
 	downgrade(Bourse,Drop,NBourse).	
 
 %%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%

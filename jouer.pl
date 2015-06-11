@@ -51,16 +51,17 @@ tour(_,[M, _, _, RJ1, RJ2], _, _, _):-
 tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
     CurrRole = 'IA',!,
-    affiche_plateau([M, B, Trader, RJ1, RJ2]),nl,
+    cls,
     write('TOUR DE '),write(J),write(' [IA] -T'),write(TourNumber),write('-'),nl,
+    affiche_plateau([M, B, Trader, RJ1, RJ2]),
     ai_random([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop]),
-    write('AI choisit d avancer de -'),write(D),
+    write('AI choisit d\'avancée de -'),write(D),
     write('-, de prendre le -'),write(Keep),
-    write('- et de laisser -'),write(Drop),write('- '),nl,
+    write('- et de jeter le -'),write(Drop),write('- '),
     jouer_coup([M, B, Trader, RJ1, RJ2], [J,D,Keep,Drop], NouveauPlateau),
     joueur_suivant(J,Jsuivant),
     TourNumberP1 is TourNumber + 1,
-    entrer_nombre(Hey),
+    cls,
     tour(Jsuivant, NouveauPlateau, J1role, J2role, TourNumberP1),
     !.
 

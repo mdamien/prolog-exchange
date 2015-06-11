@@ -18,7 +18,7 @@ afficher_bourse([H|T]):-afficher_val_bourse(H),write('|'),afficher_bourse(T).
 afficher_pos(P,P):-write('(T)').
 afficher_pos(_,_).
 
-afficher_marchs([],_,_).
+afficher_marchs([],_,_):-!.
 afficher_marchs([[H1|_]|T],P,I):-
     write(H1),afficher_pos(P,I),
     write(' '),J is I+1,afficher_marchs(T,P,J).
