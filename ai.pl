@@ -12,7 +12,7 @@ ai_random(Plateau, Coup) :-
 best_element(CoupsPossibles, _, Coup):-
     random_element(CoupsPossibles, Coup).
 
-ai_simple_best(Plateau, Coup) : -
+ai_simple_best(Plateau, Coup) :-
     write('ai simple best réfléchie!'),nl,
     coups_possibles(Plateau, CoupsPossibles),
     best_element(CoupsPossibles, 2, Coup).

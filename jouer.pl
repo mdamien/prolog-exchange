@@ -1,5 +1,7 @@
 % gprolog --init-goal '[jouer],jouer'
 
+%nth(N,L,X) :- nth1(N,L,X).
+
 :- include(affichage). 
 :- include(gen). 
 :- include(coup). 
@@ -36,8 +38,8 @@ curr_role(j1,J1role,_,J1role).
 curr_role(j2,_,J2role,J2role).
 
 %Tour Fin du jeu
-tour(_,[M, _, _, RJ1, RJ2], _, _):-!,
-    fin_jeu(M),
+tour(_,[M, _, _, RJ1, RJ2], _, _, _):-
+    fin_jeu(M),!,
     nl,write('FIN DE LA PARTIE!'),nl,
     score(RJ1,B, ScoreJ1),
     write('Score J1: '),write(ScoreJ1),nl,
@@ -46,9 +48,9 @@ tour(_,[M, _, _, RJ1, RJ2], _, _):-!,
     !.
 
 %Tour AI
-tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-!,
+tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
-    CurrRole = 'IA',
+    CurrRole = 'IA',!,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),nl,
     write('TOUR DE '),write(J),write(' [IA] -T'),write(TourNumber),write('-'),nl,
     ai_random([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop]),
@@ -58,14 +60,14 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-!,
     jouer_coup([M, B, Trader, RJ1, RJ2], [J,D,Keep,Drop], NouveauPlateau),
     joueur_suivant(J,Jsuivant),
     TourNumberP1 is TourNumber + 1,
-    entrer_nombre(Depl),
+    entrer_nombre(Hey),
     tour(Jsuivant, NouveauPlateau, J1role, J2role, TourNumberP1),
     !.
 
 %Tour Humain
-tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-!,
+tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
-    CurrRole = 'Humain',
+    CurrRole = 'Humain',!,
 
     cls,affiche_plateau([M, B, Trader, RJ1, RJ2]),
 

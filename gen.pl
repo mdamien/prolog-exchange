@@ -43,7 +43,7 @@ march_init([A,B,C,D,E,F,G,H,I]) :-
 	slice(All_F, F, All_G),
 	slice(All_G, G, All_H),
 	slice(All_H, H, All_I),
-	slice(All_I, I, _).
+	slice(All_I, I, _),!.
 
 %%% Génération du trader %%%
 %gen_trader(?Position)
