@@ -24,6 +24,8 @@ afficher_marchs([[H1|_]|T],P,I):-
     write(' '),J is I+1,afficher_marchs(T,P,J).
 
 affiche_plateau([M, B, PT, RJ1, RJ2]):-
+    %write('MMM:'),write(M),nl,
+    %write('BBB:'),write(B),nl,
     write('TAS: '),
     afficher_marchs(M,PT,1),nl,
     write('BOURSE: '),

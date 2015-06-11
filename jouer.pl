@@ -37,6 +37,11 @@ choix_fait(Choix1, Choix2, Choix2, Choix1).
 curr_role(j1,J1role,_,J1role).
 curr_role(j2,_,J2role,J2role).
 
+gagnant(ScoreJ1, ScoreJ2, 'j1'):-
+    ScoreJ1 > ScoreJ2.
+gagnant(ScoreJ1, ScoreJ1, 'j1 et j2').
+gagnant(_, _, 'j2').
+
 %Tour Fin du jeu
 tour(_,[M, B, _, RJ1, RJ2], _, _, _):-
     fin_jeu(M),!,
@@ -45,6 +50,9 @@ tour(_,[M, B, _, RJ1, RJ2], _, _, _):-
     write('Score J1: '),write(ScoreJ1),nl,
     score(RJ2,B, ScoreJ2),
     write('Score J2: '),write(ScoreJ2),nl,
+    gagnant(ScoreJ1,ScoreJ2, Gagnant),nl,nl,
+    write('         GAGNANT:' ),write(Gagnant),
+    nl,nl,nl,
     !.
 
 %Tour AI
@@ -54,7 +62,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     cls,
     write('TOUR DE '),write(J),write(' [IA] -T'),write(TourNumber),write('-'),nl,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
-    ai_random([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop]),
+    ai_simple_best([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
     write('AI choisit d\'avancée de -'),write(D),
     write('-, de prendre le -'),write(Keep),
     write('- et de jeter le -'),write(Drop),write('- '),

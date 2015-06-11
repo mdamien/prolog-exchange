@@ -44,8 +44,9 @@ jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrade
 	bouger_trader(March,Trader,Move,NTrader),
 	add_to_player(Keep,J,J1,J2,NJ1,NJ2),
 	remove_items(March,NTrader,NMarchPlusVide),
-	remove_empty_items(NMarchPlusVide,NMarch),
-	downgrade(Bourse,Drop,NBourse).	
+	remove_empty_items(NMarchPlusVide,NMarchPlusVide2),
+	remove_empty_items(NMarchPlusVide2,NMarch),
+	downgrade(Bourse,Drop,NBourse),!.	
 
 %%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
@@ -97,7 +98,11 @@ remove_top([_|T],T).
 %%%%%%%%%%%%%%%%%% Dévaluation %%%%%%%%%%%%%%%%%%
 %downgrade(Bourse,Drop,NBourse)
 downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
-	Val>0, %Voir si ça marche bien quand un produit est à zéro
+	NVal is Val-1,
+	!.
+
+downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
+	%TODO: check > 0 (j'arrive a des cas ou j'ai -1)
 	NVal is Val-1,
 	!.
 
@@ -134,6 +139,7 @@ concat([H|T],L,[H|X]):- concat(T,L,X).
 
 len([],0).
 len([_|T],N):-len(T,N2),N is N2 + 1.
+
 %%%%%%%% Pour les tests %%%%%%%%
 %jouer_coup([[[ble,riz],[mais,cacao,sucre],[cafe,mais],[riz],[sucre,mais,cafe,cacao]],[[ble,7],[riz,6],[cacao,5],[cafe,6],[sucre,6],[mais,6]],3,[ble,ble,cacao],[sucre,cacao,mais]],[j1,2,ble,riz],[M,B,T,J1,J2]).
 
