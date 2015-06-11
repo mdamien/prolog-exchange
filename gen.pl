@@ -4,44 +4,46 @@
 
 %Variables globales
 gBourseInitial([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
+gAllMarchandises([
+	ble,ble,ble,ble,ble,ble,ble,
+	riz,riz,riz,riz,riz,riz,
+	cacao,cacao,cacao,cacao,cacao,cacao,
+	cafe,cafe,cafe,cafe,cafe,cafe,
+	sucre,sucre,sucre,sucre,sucre,sucre,
+	mais,mais,mais,mais,mais,mais
+]).
+
+random_el(L,N) :-
+	length(L,Length),
+	random(1,Length,N).
+
+%take random element and remove it
+take_random(All,El,NewAll):-
+	random_el(All,N),
+	nth(N,All,El),
+	select(El,All,NewAll)
+.
+
+%return 4 four random and remove them
+slice(All, [A,B,C,D], NewAll):-
+	take_random(All,A,NewAll_A),
+	take_random(NewAll_A,B,NewAll_B),
+	take_random(NewAll_B,C,NewAll_C),
+	take_random(NewAll_C,D,NewAll).
 
 %march_init(?Marchandises)
 %Génère toutes les marchandises
 march_init([A,B,C,D,E,F,G,H,I]) :-
-	pile_init(A),
-	pile_init(B),
-	pile_init(C),
-	pile_init(D),
-	pile_init(E),
-	pile_init(F),
-	pile_init(G),
-	pile_init(H),
-	pile_init(I).
-	
-%pile_init(?Pile)
-%Génère une pile de 4 élements de marchandise
-pile_init([A,B,C,D]) :- 
-	gen_elem(A),
-	gen_elem(B),
-	gen_elem(C),
-	gen_elem(D).
-
-%gen_elem(?Element)
-%Retourne un élément de marchandise au hasard
-gen_elem(X) :- 
-	elem_rand([ble,riz,cacao,cafe,sucre,mais], X).
-
-%elem_rand(+Enum,?Elem)
-%Prend une liste similaire à une énumération et retourne un élément au hasard
-%On utilise la fonction elem pour obtenir le ième élément
-elem([H|_],1,H).
-elem([_|T],N,E):-
-	X is N-1,elem(T,X,E).
-
-elem_rand([H|T],Y) :-
-	random(1,6,Num),
-	elem([H|T],Num,Y).
-
+	gAllMarchandises(All),
+	slice(All, A, All_B),
+	slice(All_B, B, All_C),
+	slice(All_C, C, All_D),
+	slice(All_D, D, All_E),
+	slice(All_E, E, All_F),
+	slice(All_F, F, All_G),
+	slice(All_G, G, All_H),
+	slice(All_H, H, All_I),
+	slice(All_I, I, _).
 
 %%% Génération du trader %%%
 %gen_trader(?Position)
