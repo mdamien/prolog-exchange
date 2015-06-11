@@ -9,22 +9,22 @@ ai_random(Plateau, Coup) :-
     coups_possibles(Plateau, CoupsPossibles),
     random_element(CoupsPossibles, Coup).
 
-best_element(CoupsPossibles, CurrBest, Coup):-
+best_element(CoupsPossibles, _, Coup):-
     random_element(CoupsPossibles, Coup).
 
 ai_simple_best(Plateau, Coup) : -
-    write('ai random réfléchie!'),nl,
+    write('ai simple best réfléchie!'),nl,
     coups_possibles(Plateau, CoupsPossibles),
     best_element(CoupsPossibles, 2, Coup).
 
 % node = [Plateau, J]
 
-heuristic(Plateau, Score):-
+heuristic(_, Score):-
     Score = 1
 .
 
 minimax(Node, 0):-
-    heuristic(Plateau,223)
+    heuristic(Node,223)
 .
 
 ai_minimax(Plateau, Coup) :-

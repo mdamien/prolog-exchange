@@ -18,9 +18,7 @@ choix(M,Trader,Choix1, Choix2):-
 %coup_possible(+Plateau,?Coup)
 coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
     D > 0, D < 4,
-	write('D = '),write(D),nl,
     bouger_trader(M,P,D,NewT),
-    write('NewT = '),write(NewT),nl,
     choix(M,NewT,Keep,Drop),
     !.
 

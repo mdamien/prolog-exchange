@@ -11,7 +11,8 @@ entrer_nombre(X):-write('Déplacement invalide, re-essaye: '),entrer_nombre(X).
 joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
-cls :- put(27),write('[2J'). 
+%cls :- put(27),write('[2J'). 
+cls :- nl,nl,nl,nl.
 
 jouer:-
     jouer_h_vs_h.
@@ -57,6 +58,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     joueur_suivant(J,Jsuivant),
     affiche_plateau([M, B, Trader, RJ1, RJ2]),nl,
     TourNumberP1 is TourNumber + 1,
+    entrer_nombre(Depl),
     tour(Jsuivant, NouveauPlateau, J1role, J2role, TourNumberP1),
     !.
 
@@ -65,7 +67,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
     CurrRole = 'Humain',
 
-    cls, affiche_plateau([M, B, Trader, RJ1, RJ2]),
+    cls,affiche_plateau([M, B, Trader, RJ1, RJ2]),
 
     write('TOUR DE '),write(J),write(' [Humain] -T'),write(TourNumber),write('-'),nl,
 
@@ -74,9 +76,8 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     write('avance de '),write(Depl),nl,
     bouger_trader(M,Trader,Depl,TraderPred),
 
-    cls,
     choix(M, TraderPred, Choix1,Choix2),
-    affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
+    cls,affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
     write('TOUR DE '),write(J),write(' [Humain] -T'),write(TourNumber),write('-'),nl,
     write('Que prendre entre '),
     write(Choix1),
