@@ -47,7 +47,6 @@ ai_simple_best(Plateau, Coup, J) :-
     meilleur_coup(Plateau, CoupsPossibles, J, Coup, _),!
 .
 
-
 %%%% profondeur >1
 jouer_all(Plateau, J, [[_,Move,Keep,Drop]|[]], ListePlateaux) :-
    jouer_coup(Plateau, [J,Move,Keep,Drop], ListePlateaux),!
@@ -59,9 +58,10 @@ jouer_all(Plateau, J, [[_,Move,Keep,Drop]|Autres], ListePlateaux) :-
    concat([NewPlateau],Liste, ListePlateaux)
 .
 
-ai_complexe_best(Plateau, BestCoup, Score, J, 1) :-
+ai_complexe_best(Plateau, BestCoup, Score, J, 1, CoupAppel) :-
    coups_possibles(Plateau, CoupsPossibles),
-   meilleur_coup(Plateau, CoupsPossibles, J, BestCoup, Score),!
+   meilleur_coup(Plateau, CoupsPossibles, J, _, Score),
+   BestCoup is CoupAppel,!
 .
 
 ai_complexe_best([Plateau|AutresP], BestCoup, Score, J, 1) :-
@@ -71,7 +71,7 @@ ai_complexe_best([Plateau|AutresP], BestCoup, Score, J, 1) :-
    meilleur(Coup1, Score1, Coup2, Score2, BestCoup, Score),!
 .
 
-ai_complexe_best(Plateau, BestCoup, Score, J, Profondeur) :-
+ai_complexe_best(Plateau, BestCoup, Score, J, Profondeur, CoupAppel) :-
    coups_possibles(Plateau, CoupsPossibles),
    jouer_all(Plateau, J, CoupsPossibles, ListePlateaux),
    joueur_suivant(J,NJ),
@@ -79,12 +79,13 @@ ai_complexe_best(Plateau, BestCoup, Score, J, Profondeur) :-
    ai_complexe_best(ListePlateaux,BestCoup,Score,NJ,NProf),!
 .
 
-ai_complexe_best([Plateau|Autres], BestCoup, Score, J, Profondeur) :-
-   coups_possibles(Plateau, CoupsPossibles),
-   jouer_all(Plateau, J, CoupsPossibles, ListePlateaux),
+ai_complexe_best([Plateau|Autres], BestCoup, Score, J, Profondeur, [CoupAppel|AutresCA]) :-
+   coups_possibles(Plateau, [CoupP1|AutresCP]),
+   jouer_all(Plateau, J, [CoupP1|AutresCP], ListePlateaux),
    joueur_suivant(J,NJ),
    NProf is Profondeur-1,
+   ai_complexe_best(Autres, Coup2, Score2, J, Profondeur, AutresCA),
+
    ai_complexe_best(ListePlateaux,Coup1,Score1, NJ, NProf),
-   ai_complexe_best(Autres, Coup2, Score2, J, Profondeur),
-   meilleur(Coup1, Score1, Coup2, Score2, BestCoup, Score)
+   meilleur(CoupAppel, Score1, Coup2, Score2, BestCoup, Score)
 .
