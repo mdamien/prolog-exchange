@@ -7,10 +7,12 @@ getP([_, _, P, _, _],P).
 %retourne les sommets des deux piles autour du joueur
 choix(M,Trader,Choix1, Choix2):-
 	length(M, L),
-	Pmin1 = Trader+L,
-	Pmin2 = Pmin1-1, %TODO remove this hack
-    bouger_trader(M, Trader, Pmin2, P1),
-    bouger_trader(M, Trader, 1, P2),
+	T1 is Trader-1,
+   backflow(T1,L,P1),
+	T2 is Trader+1,
+   overflow(T2,L,P2),
+    %bouger_trader(M, Trader, Pmin2, P1),
+    %bouger_trader(M, Trader, 1, P2),
     top_pile(P1, M, Choix1),
     top_pile(P2, M, Choix2).
 
@@ -29,7 +31,7 @@ coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
 	C2 = [_,1,O2,O1],
 	coup_possible([M, B, P, RJ1, RJ2],[_,2,O3,O4]),
 	C3 = [_,2,O3,O4],
-	C4 = [_,2,O4,O3],	
+	C4 = [_,2,O4,O3],
 	coup_possible([M, B, P, RJ1, RJ2],[_,3,O5,O6]),
 	C5 = [_,3,O5,O6],
 	C6 = [_,3,O6,O5].
@@ -46,7 +48,7 @@ jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrade
 	remove_items(March,NTrader,NMarchPlusVide),
 	remove_empty_items(NMarchPlusVide,NMarchPlusVide2),
 	remove_empty_items(NMarchPlusVide2,NMarch),
-	downgrade(Bourse,Drop,NBourse),!.	
+	downgrade(Bourse,Drop,NBourse),!.
 
 %%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
@@ -113,8 +115,8 @@ downgrade([H|T],Drop,R) :-
 
 %%%%%%%%%%%%%%%%%% Tools %%%%%%%%%%%%%%%%%%
 %overflow(+Position,+LongueurPlateau,?PositionModuloLongueur)
-overflow(X,L,R) :- 
-	Y is X-L, 
+overflow(X,L,R) :-
+	Y is X-L,
 	Y>0,
 	overflow(Y,L,R),
 	!.

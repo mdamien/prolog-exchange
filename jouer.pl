@@ -2,10 +2,10 @@
 
 %nth(N,L,X) :- nth1(N,L,X).
 
-:- include(affichage). 
-:- include(gen). 
-:- include(coup). 
-:- include(ai). 
+:- include(affichage).
+:- include(gen).
+:- include(coup).
+:- include(ai).
 
 entrer_nombre(X):-read(X),number(X),X > -1,X < 4,!.
 entrer_nombre(X):-write('Déplacement invalide, re-essaye: '),entrer_nombre(X).
@@ -62,7 +62,8 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     cls,
     write('TOUR DE '),write(J),write(' [IA] -T'),write(TourNumber),write('-'),nl,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
-    ai_simple_best([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
+    %ai_simple_best([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
+    ai_complexe_best([M, B, Trader, RJ1, RJ2],[_,D,Keep,Drop], _, J,1),
     write('AI choisit d\'avancée de -'),write(D),
     write('-, de prendre le -'),write(Keep),
     write('- et de jeter le -'),write(Drop),write('- '),
