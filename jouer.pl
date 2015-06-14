@@ -14,7 +14,7 @@ joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
 %cls :- put(27),write('[2J'). 
-cls :- nl,nl,nl,nl.
+cls :- nl,nl,write('-------'),nl,nl.
 
 jouer:-
     jouer_h_vs_h.
