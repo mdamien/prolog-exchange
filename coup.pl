@@ -49,6 +49,7 @@ jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrade
 	remove_empty_items(NMarchPlusVide,NMarchPlusVide2),
 	remove_empty_items(NMarchPlusVide2,NMarch),
 	downgrade(Bourse,Drop,NBourse),!.
+	%TODO: I can stand on an empty stack (when removing an empty stack, update the player psotiion accordingly)
 
 %%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)

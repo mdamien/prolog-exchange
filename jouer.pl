@@ -14,7 +14,7 @@ joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
 %cls :- put(27),write('[2J'). 
-cls :- nl,nl,write('-------'),nl,nl.
+cls :- nl,write('-------'),nl,nl.
 
 jouer:-
     jouer_h_vs_h.
@@ -43,9 +43,10 @@ gagnant(ScoreJ1, ScoreJ1, 'j1 et j2').
 gagnant(_, _, 'j2').
 
 %Tour Fin du jeu
-tour(_,[M, B, _, RJ1, RJ2], _, _, _):-
+tour(_,[M, B, Trader, RJ1, RJ2], _, _, _):-
     fin_jeu(M),!,
-    nl,write('FIN DE LA PARTIE!'),nl,
+    affiche_plateau([M, B, Trader, RJ1, RJ2]),
+    nl,bold('FIN DE LA PARTIE!'),nl,
     score(RJ1,B, ScoreJ1),
     write('Score J1: '),write(ScoreJ1),nl,
     score(RJ2,B, ScoreJ2),
@@ -60,7 +61,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
     CurrRole = 'IA',!,
     cls,
-    write('TOUR DE '),write(J),write(' [IA] -T'),write(TourNumber),write('-'),nl,
+    bold('TOUR DE '),bold(J),bold(' [IA] -T'),bold(TourNumber),bold('-'),nl,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
     ai_simple_best([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
     write('AI choisit d\'avancée de -'),write(D),
