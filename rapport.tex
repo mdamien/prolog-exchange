@@ -213,11 +213,11 @@ Dans le cadre des TP de l'UV IA02, nous devons implémenter une version Prolog d
 \chapter{Principaux prédicats}
 \section{Gestion du plateau}
 \subsection{Affichage}
-Pour l'affichage, le code est plutot simple. Nous avons même put utiliser des codes ANSI afin de rendre le résultat attractif.
+Pour l'affichage, le code est plutot simple. Nous avons même pu utiliser des codes ANSI afin de rendre le résultat attractif.
 \begin{center}
 \includegraphics[height=3cm]{screen.png}\\
-\vspace{2.5cm}
-L'affichage inclue le score des joueurs et indique la position du trader sur les tas en plus des basiques.
+\end{center}
+L'affichage inclut le score des joueurs et indique la position du trader sur les tas en plus des basiques.
 \subsection{Génération du plateau}
 En début de partie il faut générer les différentes structures qui composent un plateau. On crée donc un prédicat retournant un nouveau plateau.\\
 Le prédicat va générer l'ensemble des piles en formant une liste, contenant des sous-listes de 4 éléments. Pour générer ces sous-listes, on tire un nombre au hasard, correspondant à l'indice d'un élément dans une grande liste contenant tout les jetons du jeu.
@@ -240,16 +240,15 @@ Pour la vérification des éléments, on appelle un prédicat \textit{choix} qui
 \section{Intelligence artificielle}
 Nous avons programmé plusieurs intelligences artificielles afin de pouvoir avoir un benchmark de celles-ci:
 \begin{itemize}
-    \item Une intelligence purement aléatoire, qui choisit un coup aléatoire parmis les coups possibles (ai\_random)
-    \item Une intelligence qui regarde à un seul niveau les scores possibles (ai\_simple_best)
-    \item Une intelligence qui utilise l'algorithme minimax (ai\_minimax)
+    \item Une intelligence purement aléatoire, qui choisit un coup aléatoire parmis les coups possibles (\textit{ai\_random})
+    \item Une intelligence qui regarde à un seul niveau les scores possibles (\textit{ai\_simple\_best})
+    \item Une intelligence qui utilise l'algorithme minimax (\textit{ai\_minimax})
 \end{itemize}
 
-Pour l'intelligence minimax, le seul probléme est que la profondeur est limité à 3 si l'on ne veut pas trop avoir de stackoverflow et à 2 si l'on veut pouvoir faire une partie compléte.
-\\
+Pour l'intelligence minimax, le seul problème est que la profondeur est limitée à 3 si l'on ne veut pas trop avoir de stackoverflow et à 2 si l'on veut pouvoir faire une partie complète.
 Nous avons aussi programmé des combats entre ces IA afin de tester leurs performances, voici les résultats de pourcentages de vainqueurs selon les IAs:
 
-\begin{lstlisting}[language=prolog]
+\begin{lstlisting}
 Random VS Random
 j1 :73.5%
 j2 :20.0%
@@ -269,86 +268,24 @@ Simple best vs Simple best
 j1 :67.0%
 j2 :27.5%
 j1 et j2 :5.5%
+
+Depth 3 vs Depth 3
+j1 :72.9%
+j2 :25.7%
+j1 et j2 :1.4%
 \end{lstlisting}
 
-On voit bien qu'une intelligence de profondeur 1 est déja trés efficace par rapport à un jeu aléatoire. On peut donc facilement imaginer les gains d'une IA de profondeur supérieure.
-\\
+On voit bien qu'une intelligence de profondeur 1 est déja trés efficace par rapport à un jeu aléatoire. On peut donc facilement imaginer les gains d'une IA de profondeur supérieure.\\
+On remarque que le joueur 1 à un avantage stratégique évident (70\% de chance de gagner à coups alétoires, 67\% dans le cas de coups moins aléatoires).\\
 
-On remarque que le joueur 1 à un avantage stratégique évident (70\% de chance de gagner à coups alétoires, 67\% dans le cas de coups moins aléatoires).
-\\
-
-Voici ci-dessous l'essentiel du code de l'algorithme minimax.
-
-\begin{lstlisting}[language=prolog]
-%Pour un état donné, retourne le meilleur coup minimax
-%State = [Plateau, CoupJoue, Joueur, Profondeur]
-minimax([Plateau, CoupJoue, Joueur, Profondeur], BestNextState, Score) :-
-    Profondeur >= 1,  %Ici, Profondeur MAX est défini
-    m_next_states([Plateau, CoupJoue, Joueur, Profondeur], NextStates),
-    m_simple_best(NextStates, BestNextState, Score), !
-.
-minimax(State, BestNextState, Score) :-
-    m_next_states(State, NextStates),
-    m_best(NextStates, BestNextState, Score), !
-.
-minimax(State, _, Score) :-
-    m_score_state(State, Score)
-.
-
-%applique un coup sur un état et renvoi le nouvel état
-m_apply_coup([Plateau, _, Joueur, Profondeur], [_,Move,Keep,Drop],
-        [NewPlateau, [_,Move,Keep,Drop], NewJoueur, NewProfondeur]):-
-        jouer_coup(Plateau, [Joueur,Move,Keep,Drop], NewPlateau),
-        joueur_suivant(Joueur, NewJoueur),
-        NewProfondeur is Profondeur+1
-.
-
-%renvoi les nouveaux états possibles
-m_next_states([Plateau, _, Joueur, Profondeur], [AP,BP,CP,DP,EP,FP]):-
-    coups_possibles(Plateau, [A,B,C,D,E,F]),
-    m_apply_coup([Plateau, _, Joueur, Profondeur], A, AP),
-    m_apply_coup([Plateau, _, Joueur, Profondeur], B, BP),
-    ....
-.
-
-%renvoi vrai si le score du joueur est à minimiser
-m_min_to_move([_,_,_,P]):-
-    Pm is P mod 2,
-    Pm is 1
-.
-
-%retourne le score de l'état
-m_score_state([Plateau, _, Joueur, _], Score):-
-    score_joueur(Joueur, Plateau, Score1),
-    joueur_suivant(Joueur,Joueur2),
-    score_joueur(Joueur2, Plateau, Score2),
-    Score is Score1-Score2
-.
-
-%retourne le meilleur état maximisant le score et le score associé en appelant récursivement minimax
-m_best([State], State, Score) :-
-    minimax(State, _, Score), !
-.
-m_best([State1 | States], BestState, BestScore) :-
-    minimax(State1, _, Score1),
-    m_best(States, State2, Score2),
-    m_better_of_two(State1, Score1, State2, Score2, BestState, BestScore)
-.
-
-%retourne le meilleur état sans appel récursif
-m_simple_best([State], State, Score) :-
-    m_score_state(State, Score), !
-.
-m_simple_best([State1 | States], BestState, BestScore) :-
-    m_score_state(State1, Score1),
-    m_simple_best(States, State2, Score2),
-    m_better_of_two(State1, Score1, State2, Score2, BestState, BestScore)
-.
-\end{lstlisting}
 \chapter{Conclusion}
-Nous avons bien réussi à implémenter une version Prolog du jeu Chicago Exchange
-
-Prolog était un language trés adapté pour ce probléme. L'implémentation gprolog n'est peut être pas assez évoluée, ouitllée et documentée pour permettre un dévelopement confortable mais celà ne nous à pas empécher à déveloper des fonctionnalités avancées.
-
-
+Nous avons bien réussi à implémenter une version Prolog du jeu Chicago Exchange. Le jeu est complet, c'est à dire qu'il se déroule correctement et répond au cahier des charges :
+\begin{itemize}
+   \item Partie Humain vs Humain
+   \item Partie IA vs Humain
+   \item Partie IA vs IA
+\end{itemize}
+Prolog était un language trés adapté pour ce probléme. L'implémentation \textit{gprolog} n'est peut être pas assez évoluée, outillée et documentée pour permettre un dévelopement confortable mais celà ne nous à pas empécher à déveloper des fonctionnalités avancées.\\
+Entre autre la gestion des marchandises, de la bourse, des réserves et de la position du trader sont implémentés, fonctionnels et sans failles. Notre intelligence artificielle reste cependant rudimentaire, c'est à dire qu'elle n'implémente pas l'algorithme \textit{minimax} et ne fait ses calculs que en fonction de l'état courant du plateau. Dans un sens, cette technique est la plus logique étant donné que les joueurs ne peuvent savoir que la marchandise se trouvant sur le dessus de la pile, regarder en dessus et donc calculer les prochains états du jeu relève donc de la triche.\\
+Néanmoins nous avons essayé d'implémenter l'algorithme \textit{minimax}, mais celui-ci ne fonctionne qu'avec une profondeur de 1. Notre implémentation n'était donc pas opérationnelle, nous avons conservé notre IA basique.
 \end{document}

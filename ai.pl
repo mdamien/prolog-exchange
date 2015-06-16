@@ -17,7 +17,7 @@ jouer_ia(Plateau, Coup, J):-
 %ici pour j2
 jouer_ia(Plateau, Coup, J):-
     J = 'j2',
-    ai_simple_best(Plateau, Coup, J)
+    ai_minimax(Plateau, Coup, J)
 .
 
 %AI: Choix alétoire parmis les coups possible
