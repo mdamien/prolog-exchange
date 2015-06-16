@@ -10,7 +10,7 @@ random_element(L,X) :-
 %ici pour j1
 jouer_ia(Plateau, Coup, J):-
     J = 'j1',
-    ai_minimax(Plateau, Coup, J)
+    ai_simple_best(Plateau, Coup, J)
 .
 
 %joue pour chaque joueur une ai particuliére
