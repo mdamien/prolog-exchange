@@ -20,7 +20,7 @@ joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
 %cls :- put(27),write('[2J'). 
-cls :- nl,write('-------'),nl,nl.
+cls :- nl,nl,nl,write('-------'),nl,nl,nl,nl.
 
 jouer:-
     jouer_h_vs_h.
@@ -40,8 +40,8 @@ jouer_h_vs_ia:-
 choix_fait(Choix1, Choix2, Choix1, Choix2).
 choix_fait(Choix1, Choix2, Choix2, Choix1).
 
-curr_role(j1,J1role,_,J1role).
-curr_role(j2,_,J2role,J2role).
+curr_role('j1',J1role,_,J1role).
+curr_role('j2',_,J2role,J2role).
 
 gagnant(ScoreJ1, ScoreJ2, 'j1'):-
     ScoreJ1 > ScoreJ2.
@@ -69,18 +69,15 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     cls,
     bold('TOUR DE '),bold(J),bold(' [IA] -T'),bold(TourNumber),bold('-'),nl,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
-    ai_minimax([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
-    write('AI choisit d\'avancée de -'),write(D),
+    jouer_ia([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
+    write('AI choisit d\'avancer de -'),write(D),
     write('-, de prendre le -'),write(Keep),
     write('- et de jeter le -'),write(Drop),write('- '),
     nl,
-    score(RJ1,B, ScoreJ1),
-    write('Score J1: '),write(ScoreJ1),nl,
-    score(RJ2,B, ScoreJ2),
-    write('Score J2: '),write(ScoreJ2),nl,
     jouer_coup([M, B, Trader, RJ1, RJ2], [J,D,Keep,Drop], NouveauPlateau),
     joueur_suivant(J,Jsuivant),
     TourNumberP1 is TourNumber + 1,
+    %write('Tapez "1" pour continuer...'),read(IOP),
     cls,
     tour(Jsuivant, NouveauPlateau, J1role, J2role, TourNumberP1),
     !.
@@ -90,19 +87,26 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     curr_role(J, J1role, J2role, CurrRole),
     CurrRole = 'Humain',!,
 
-    cls,affiche_plateau([M, B, Trader, RJ1, RJ2]),
+    cls,
 
     bold('TOUR DE '),bold(J),bold(' [Humain] -T'),bold(TourNumber),bold('-'),nl,
+
+
+    affiche_plateau([M, B, Trader, RJ1, RJ2]),
 
     write('Avancer de combien ? '),
     entrer_nombre(Depl),
-    write('avance de '),write(Depl),nl,
     bouger_trader(M,Trader,Depl,TraderPred),
 
     choix(M, TraderPred, Choix1,Choix2),
-    cls,affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
+
+    cls,
 
     bold('TOUR DE '),bold(J),bold(' [Humain] -T'),bold(TourNumber),bold('-'),nl,
+
+    affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
+
+    nl,
     write('Que prendre entre '),
     write(Choix1),red('(1)'),
     write(' et '),

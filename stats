@@ -1,0 +1,24 @@
+Random VS Random
+j1 :73.5%
+j2 :20.0%
+j1 et j2 :6.5%
+
+Random vs Simple best
+j2 :94.0%
+j1 :4.5%
+j1 et j2 :1.5%
+
+Simple best vs Random
+j1 :97.5%
+j1 et j2 :2.0%
+j2 :0.5%
+
+Simple best vs Simple best
+j1 :67.0%
+j2 :27.5%
+j1 et j2 :5.5%
+
+Depth 3s vs Depth 3
+j1 :59.3%
+j2 :38.9%
+j1 et j2 :1.9%

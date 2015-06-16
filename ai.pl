@@ -1,13 +1,24 @@
 
-
 random_element(L,X) :-
     length(L,LLength),
     random(1, LLength, R),
     nth(R,L,X)
 .
 
-ai_random(Plateau, Coup) :-
-    %write('ai random réfléchie!'),nl,
+
+
+jouer_ia(Plateau, Coup, J):-
+    J = 'j1',
+    ai_minimax(Plateau, Coup, J)
+.
+
+jouer_ia(Plateau, Coup, J):-
+    J = 'j2',
+    ai_minimax(Plateau, Coup, J)
+.
+
+
+ai_random(Plateau, Coup, _) :-
     coups_possibles(Plateau, CoupsPossibles),
     random_element(CoupsPossibles, Coup)
 .
@@ -22,12 +33,13 @@ score_joueur('j2', [_, B, _, _, RJ], Score):-
 
 score_coup(Plateau, [_,Move,Keep,Drop], J, Score):-
     jouer_coup(Plateau, [J,Move,Keep,Drop], NouveauPlateau),
-    score_joueur(J, NouveauPlateau, Score)
-    %write('Score de '),write([Move,Keep,Drop]),write('  '),write(Score),nl
+    score_joueur(J, NouveauPlateau, Score1),
+    joueur_suivant(J,Joueur2),
+    score_joueur(Joueur2, Plateau, Score2),
+    Score is Score1-Score2
 .
 
 meilleur(Coup1, Score1, _, Score2, Coup1, Score1):-
-    %write([Coup1, Score1, Score2, Coup1, Score1]),nl,
     Score1 > Score2,!.
 meilleur(_, _, Coup2, Score2, Coup2, Score2).
 
@@ -54,7 +66,19 @@ ai_minimax(Plateau, Coup, J) :-
     nl,!
 .
 
-%TODO: limit depth
+%State = [Plateau, CoupJoue, Joueur, Profondeur]
+
+minimax([Plateau, CoupJoue, Joueur, Profondeur], BestNextState, Score) :-
+    Profondeur > 1,
+    m_next_states([Plateau, CoupJoue, Joueur, Profondeur], NextStates),
+    m_simple_best(NextStates, BestNextState, Score), !.
+
+minimax(State, BestNextState, Score) :-
+    m_next_states(State, NextStates),
+    m_best(NextStates, BestNextState, Score), !.
+
+minimax(State, _, Score) :-
+    m_score_state(State, Score).
 
 m_apply_coup([Plateau, _, Joueur, Profondeur], [_,Move,Keep,Drop],
         [NewPlateau, [_,Move,Keep,Drop], NewJoueur, NewProfondeur]):-
@@ -78,21 +102,10 @@ m_min_to_move([_,_,_,P]):-
     Pm is 0.
 
 m_score_state([Plateau, _, Joueur, _], Score):-
-    score_joueur(Joueur, Plateau, Score).
-
-%State = [Plateau, CoupJoue, Joueur, Profondeur]
-
-minimax([Plateau, CoupJoue, Joueur, Profondeur], BestNextState, Score) :-
-    Profondeur > 3,
-    m_next_states([Plateau, CoupJoue, Joueur, Profondeur], NextStates),
-    m_simple_best(NextStates, BestNextState, Score), !.
-
-minimax(State, BestNextState, Score) :-
-    m_next_states(State, NextStates),
-    m_best(NextStates, BestNextState, Score), !.
-
-minimax(State, _, Score) :-
-    m_score_state(State, Score).
+    score_joueur(Joueur, Plateau, Score1),
+    joueur_suivant(Joueur,Joueur2),
+    score_joueur(Joueur2, Plateau, Score2),
+    Score is Score1-Score2.
 
 m_best([State], State, Score) :- 
     minimax(State, _, Score), !.
