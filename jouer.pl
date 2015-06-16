@@ -63,7 +63,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
     cls,
     bold('TOUR DE '),bold(J),bold(' [IA] -T'),bold(TourNumber),bold('-'),nl,
     affiche_plateau([M, B, Trader, RJ1, RJ2]),
-    ai_simple_best([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
+    ai_minimax([M, B, Trader, RJ1, RJ2], [_,D,Keep,Drop], J),
     write('AI choisit d\'avancée de -'),write(D),
     write('-, de prendre le -'),write(Keep),
     write('- et de jeter le -'),write(Drop),write('- '),
