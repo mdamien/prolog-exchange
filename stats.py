@@ -5,7 +5,7 @@ from collections import Counter
 
 os.system("""rm out/*""")
 
-for i in range(500):
+for i in range(200):
     os.system("""gprolog --init-goal "[jouer],randomize,jouer_ia_vs_ia,halt" > out/"""+str(i))
 
 count = Counter()

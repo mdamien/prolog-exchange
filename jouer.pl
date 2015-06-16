@@ -6,6 +6,7 @@
 :- include(gen).
 :- include(coup).
 :- include(ai).
+:- include(tools).
 
 entrer_nombre(X):-read(X),number(X),X > -1,X < 4,!.
 entrer_nombre(X):-write('Déplacement invalide, re-essaye: '),entrer_nombre(X).

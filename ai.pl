@@ -107,7 +107,7 @@ m_score_state([Plateau, _, Joueur, _], Score):-
     score_joueur(Joueur2, Plateau, Score2),
     Score is Score1-Score2.
 
-m_best([State], State, Score) :- 
+m_best([State], State, Score) :-
     minimax(State, _, Score), !.
 
 m_best([State1 | States], BestState, BestScore) :-
@@ -115,7 +115,7 @@ m_best([State1 | States], BestState, BestScore) :-
     m_best(States, State2, Score2),
     m_better_of_two(State1, Score1, State2, Score2, BestState, BestScore).
 
-m_simple_best([State], State, Score) :- 
+m_simple_best([State], State, Score) :-
     m_score_state(State, Score), !.
 
 m_simple_best([State1 | States], BestState, BestScore) :-
@@ -128,6 +128,6 @@ m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
     Score0 > Score1, !.
 
 m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
-    Score0 < Score1, !. 
+    Score0 < Score1, !.
 
 m_better_of_two(_, _, State1, Score1, State1, Score1).
