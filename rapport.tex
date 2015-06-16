@@ -245,5 +245,13 @@ Pour terminer, il faut dévaluer l'élément qui est jeté. Pour cela on parcour
 Dans notre traitement du coup, il faut prendre en cas la situation où une pile devient vide. Dans ce cas il faut la supprimer, ce qui implique que la position du trader devient fausse (puisqu'il ,n'y a une ou deux pile en moins). De ce fait on effectue un test sur la position du trader après avoir joué, afin de s'assurer que sa position ne dépasse pas le nombre de pile.
 
 \chapter{Conclusion}
-Nous avons bien réussi à implémenter une version Prolog du jeu Chicago Exchange
+Nous avons bien réussi à implémenter une version Prolog du jeu Chicago Exchange. Le jeu est complet, c'est à dire qu'il se déroule correctement et répond au cahier des charges :
+\begin{itemize}
+   \item Partie Humain vs Humain
+   \item Partie IA vs Humain
+   \item Partie IA vs IA
+\end{itemize}
+Entre autre la gestion des marchandises, de la bourse, des réserves et de la position du trader sont implémentés, fonctionnels et sans failles. Notre intelligence artificielle reste cependant rudimentaire, c'est à dire qu'elle n'implémente pas l'algorithme \textit{minimax} et ne fait ses calculs que en fonction de l'état courant du plateau. Dans un sens, cette technique est la plus logique étant donné que les joueurs ne peuvent savoir que la marchandise se trouvant sur le dessus de la pile, regarder en dessus et donc calculer les prochains états du jeu relève donc de la triche.\\
+Néanmoins nous avons essayé d'implémenter l'algorithme \textit{minimax}, mais celui-ci ne fonctionne qu'avec une profondeur de 1. Notre implémentation n'était donc pas opérationnelle, nous avons conservé notre IA basique.
+
 \end{document}
