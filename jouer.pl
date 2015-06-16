@@ -1,7 +1,3 @@
-% gprolog --init-goal '[jouer],jouer'
-
-%nth(N,L,X) :- nth1(N,L,X).
-
 :- include(affichage).
 :- include(gen).
 :- include(coup).
@@ -20,7 +16,7 @@ entrer_choix(C1, C2, C):-write('Choix invalide, re-essaye: '),entrer_choix(C1,C2
 joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
-%cls :- put(27),write('[2J'). 
+%cls :- put(27),write('[2J').  %clear screen
 cls :- nl,nl,nl,write('-------'),nl,nl,nl,nl.
 
 jouer:-
