@@ -1,29 +1,14 @@
-top_pile(Index,M,Top):-
-    nth(Index,M,[Top|_]).
-
-getM([M, _, _, _, _],M).
-getP([_, _, P, _, _],P).
-
-%retourne les sommets des deux piles autour du joueur
-choix(M,Trader,Choix1, Choix2):-
-	length(M, L),
-	T1 is Trader-1,
-   backflow(T1,L,P1),
-	T2 is Trader+1,
-   overflow(T2,L,P2),
-    %bouger_trader(M, Trader, Pmin2, P1),
-    %bouger_trader(M, Trader, 1, P2),
-    top_pile(P1, M, Choix1),
-    top_pile(P2, M, Choix2).
-
 %%%%%%%%%%%%%%%%%% Calcul de coups %%%%%%%%%%%%%%%%%%
+%Vérifie qu'un coup respecte les règles du jeu
 %coup_possible(+Plateau,?Coup)
 coup_possible([M, _, P, _, _], [_,D,Keep,Drop]) :-
-    D > 0, D < 4,
-    bouger_trader(M,P,D,NewT),
-    choix(M,NewT,Keep,Drop),
-    !.
+    D > 0, D < 4,                   %Check de la valeur du déplacement
+    bouger_trader(M,P,D,NewT),      %On déplace le trader
+    choix(M,NewT,Keep,Drop),        %On vérifie les choix
+    !
+.
 
+%Retourne la liste des coups autorisés en fonction de l'état du plateau
 %coups_possibles(+Plateau, ?ListeCoups)
 coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
 	coup_possible([M, B, P, RJ1, RJ2],[_,1,O1,O2]),
@@ -34,45 +19,51 @@ coups_possibles([M, B, P, RJ1, RJ2], [C1,C2,C3,C4,C5,C6]) :-
 	C4 = [_,2,O4,O3],
 	coup_possible([M, B, P, RJ1, RJ2],[_,3,O5,O6]),
 	C5 = [_,3,O5,O6],
-	C6 = [_,3,O6,O5].
-
-remove_empty_items(In,Out):-
-	select([],In,Out);Out = In.
+	C6 = [_,3,O6,O5]
+.
 
 %%%%%%%%%%%%%%%%%% Jouer un coup %%%%%%%%%%%%%%%%%%
+%Joue un coup et retourne le nouvel état du plateau
+%Le coup qui est passé en entrée DOIT ÊTRE VALIDE !
 %jouer_coup(+PlateauInitial, +Coup, ?NouveauPlateau)
-%Le coup qui est passé en entrée doit être valide.
 jouer_coup([March,Bourse,Trader,J1,J2],[J,Move,Keep,Drop],[NMarch,NBourse,NTrader,NJ1,NJ2]) :-
-	bouger_trader(March,Trader,Move,NTrader),
+	bouger_trader(March,Trader,Move,TmpTrader),
 	add_to_player(Keep,J,J1,J2,NJ1,NJ2),
-	remove_items(March,NTrader,NMarchPlusVide),
+	remove_items(March,TmpTrader,NMarchPlusVide),
 	remove_empty_items(NMarchPlusVide,NMarchPlusVide2),
 	remove_empty_items(NMarchPlusVide2,NMarch),
-	downgrade(Bourse,Drop,NBourse),!.
-	%TODO: I can stand on an empty stack (when removing an empty stack, update the player psotiion accordingly)
+   bouger_trader(NMarch,TmpTrader,0,NTrader),  %Pour que le trader soit à une position valide si une pile a disparue
+	downgrade(Bourse,Drop,NBourse),!
+.
 
 %%%%%%%%%%%%%%%%%% Mouvement du trader %%%%%%%%%%%%%%%%%%
+%Déplace le trader et retourne le nouvel emplacement du trader.
+%Gère le cas où le trader dépasse le nombre de pile.
 %bouger_trader(+Marchandises,+AncienTrader,+Deplacement,?NouveauTrader)
 bouger_trader(March,OldT,Move,NewT) :-
 	X is OldT+Move,
 	length(March,L),
 	overflow(X,L,R),
-	NewT is R.
+	NewT is R
+.
 
 %%%%%%%%%%%%%%%%%% Ajouter une marchandise à un joueur %%%%%%%%%%%%%%%%%%
-%add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2)
+%Ajoute la marchandise passée en paramètre dans la bonne réserve du joueur
+%add_to_player(+Objet,+Joueur,+Reserve1,+Reserve2,?NewReserve1, ?NewReserve2)
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
-	J == 'j1',
+	J == 'j1', %Si c'est le joueur 1
 	NJ1 = [Keep|J1],
 	NJ2 = J2,
-	!.
-
+	!
+.
 add_to_player(Keep,J,J1,J2,NJ1,NJ2) :-
-	J == 'j2',
+	J == 'j2', %Si c'est le joueur 2
 	NJ2 = [Keep|J2],
-	NJ1 = J1.
+	NJ1 = J1
+.
 
 %%%%%%%%%%%%%%%%%% Retrait des 2 items %%%%%%%%%%%%%%%%%%
+%Supprime les éléments en haut des piles autour du trader
 %remove_items(+Marchandises,+NewPosTrader,?NewMarchandises)
 remove_items(March,Trader,NMarch) :-
 	length(March,L),
@@ -81,80 +72,36 @@ remove_items(March,Trader,NMarch) :-
 	TPos2 is Trader+1,
 	overflow(TPos2,L,Pos2),
 	remove(March,Pos1,TmpMarch),
-	remove(TmpMarch,Pos2,TmpMarch2),
-	clear_empty(TmpMarch2,NMarch).
+	remove(TmpMarch,Pos2,NMarch)
+.
 
-%remove(Marchandises,Position,NewMarchandises)
 %Retire l'élément en haut de la pile indiquée par Position
+%remove(+Marchandises,+Position,?NewMarchandises)
 remove([H|T],1,R) :-
 	remove_top(H,X),
 	concat([X],T,R),
-	!.
+	!
+.
 remove([H|T],Pos,NMarch) :-
 	NPos is Pos-1,
 	remove(T,NPos,R),
 	concat([H],R,NMarch),
-	!.
+	!
+.
+
 %Retire le premier élément d'une liste
+%remove_top(+Liste,?ListeMoinsTete)
 remove_top([_|T],T).
 
 %%%%%%%%%%%%%%%%%% Dévaluation %%%%%%%%%%%%%%%%%%
-%downgrade(Bourse,Drop,NBourse)
-downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
+%Dévalue la valeur boursière d'un élément
+%downgrade(+Bourse,+ElementADevalué,?NewBourse)
+downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :- %Lorsque l'on a trouvé la bonne valeur
 	NVal is Val-1,
-	!.
-
-downgrade([[Drop|Val]|T],Drop,[[Drop,NVal]|T]) :-
-	%TODO: check > 0 (j'arrive a des cas ou j'ai -1)
-	NVal is Val-1,
-	!.
-
-downgrade([H|T],Drop,R) :-
+	!
+.
+downgrade([H|T],Drop,R) :- %On parcourt la liste Bourse
 	downgrade(T,Drop,Tmp),
 	concat([H],Tmp,R),
-	!.
-
-%%%%%%%%%%%%%%%%%% Tools %%%%%%%%%%%%%%%%%%
-%overflow(+Position,+LongueurPlateau,?PositionModuloLongueur)
-overflow(X,L,R) :-
-	Y is X-L,
-	Y>0,
-	overflow(Y,L,R),
-	!.
-overflow(R,_,R).
-
-%Supprime une sous-liste lorsque celle-ci est vide
-clear_empty([[]|T],T).
-clear_empty([],[]).
-clear_empty([H|T],NMarch) :-
-	clear_empty(T,R),
-	concat([H],R,NMarch),
-	!.
-
-backflow(X,L,Y) :-
-	X=<0,
-	Y is L,
-	!.
-backflow(X,_,X).
-
-concat([],L,L).
-concat([H|T],L,[H|X]):- concat(T,L,X).
-
-len([],0).
-len([_|T],N):-len(T,N2),N is N2 + 1.
-
-%%%%%%%% Pour les tests %%%%%%%%
-%jouer_coup([[[ble,riz],[mais,cacao,sucre],[cafe,mais],[riz],[sucre,mais,cafe,cacao]],[[ble,7],[riz,6],[cacao,5],[cafe,6],[sucre,6],[mais,6]],3,[ble,ble,cacao],[sucre,cacao,mais]],[j1,2,ble,riz],[M,B,T,J1,J2]).
-
-
-bourse_val([[K,V]|_], K, V):- !.
-bourse_val([_|T], K, V):-
-	bourse_val(T, K, V).
-
-fin_jeu(M) :- length(M,L), L < 3.
-
-score([], _, 0).
-score([H|T], Bourse, Points):-
-	bourse_val(Bourse, H, Pts),
-	score(T, Bourse, AutresPts),
-	Points is (Pts + AutresPts).
+	!
+.

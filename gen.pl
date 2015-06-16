@@ -1,7 +1,3 @@
-%Prochain TP le 19-05 puis 02-06 puis le 16-06
-
-%gprolog --init-goal "[gen],[affichage],depart_plateau(Y),write(Y),nl,affiche_plateau(Y),halt"
-
 %Variables globales
 gBourseInitial([[ble,7],[riz,6],[cacao,6],[cafe,6],[sucre,6],[mais,6]]).
 gAllMarchandises([
@@ -13,26 +9,32 @@ gAllMarchandises([
 	mais,mais,mais,mais,mais,mais
 ]).
 
+%Récupère un élément aléatoire dans une liste
+%random_el(+Liste,?Element)
 random_el(L,N) :-
 	length(L,Length),
-	random(1,Length,N).
+	random(1,Length,N)
+.
 
-%take random element and remove it
+%Récupère un élément aléatoire et le supprime de la liste
+%take_random(+Liste,?Element,?NewListe)
 take_random(All,El,NewAll):-
 	random_el(All,N),
 	nth(N,All,El),
 	select(El,All,NewAll)
 .
 
-%return 4 four random and remove them
+%Retourne 4 élement aléatoire et les supprime d'une liste
+%slice(+Liste,?ListeElement, ?NewListe)
 slice(All, [A,B,C,D], NewAll):-
 	take_random(All,A,NewAll_A),
 	take_random(NewAll_A,B,NewAll_B),
 	take_random(NewAll_B,C,NewAll_C),
-	take_random(NewAll_C,D,NewAll).
+	take_random(NewAll_C,D,NewAll)
+.
 
-%march_init(?Marchandises)
 %Génère toutes les marchandises
+%march_init(?Marchandises)
 march_init([A,B,C,D,E,F,G,H,I]) :-
 	gAllMarchandises(All),
 	slice(All, A, All_B),
@@ -43,20 +45,21 @@ march_init([A,B,C,D,E,F,G,H,I]) :-
 	slice(All_F, F, All_G),
 	slice(All_G, G, All_H),
 	slice(All_H, H, All_I),
-	slice(All_I, I, _),!.
+	slice(All_I, I, _),!
+.
 
 %%% Génération du trader %%%
-%gen_trader(?Position)
 %Génère la position du trader en début de partie
+%gen_trader(?Position)
 gen_trader(X) :-
-	random(1,9,X).
+	random(1,9,X)
+.
 
 %%% Génération du plateau %%%
-%gen_plateau(?Plateau)
-%Retourne la structure plateau initialisée M, B, PT, RJ1, RJ2
+%Retourne la structure plateau initialisée M, B, PT, RJ1, RJ
+%plateau_depart(?Plateau)
 plateau_depart([March,Bourse,Trader,[],[]]) :-
-	%user_time(TS),
-	%set_seed(TS),
 	march_init(March),
 	gBourseInitial(Bourse),
-	gen_trader(Trader).
+	gen_trader(Trader)
+.

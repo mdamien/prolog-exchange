@@ -83,7 +83,7 @@ m_score_state([Plateau, _, Joueur, _], Score):-
 %State = [Plateau, CoupJoue, Joueur, Profondeur]
 
 minimax([Plateau, CoupJoue, Joueur, Profondeur], BestNextState, Score) :-
-    Profondeur > 3,
+    Profondeur >= 0,
     m_next_states([Plateau, CoupJoue, Joueur, Profondeur], NextStates),
     m_simple_best(NextStates, BestNextState, Score), !.
 
@@ -94,7 +94,7 @@ minimax(State, BestNextState, Score) :-
 minimax(State, _, Score) :-
     m_score_state(State, Score).
 
-m_best([State], State, Score) :- 
+m_best([State], State, Score) :-
     minimax(State, _, Score), !.
 
 m_best([State1 | States], BestState, BestScore) :-
@@ -102,7 +102,7 @@ m_best([State1 | States], BestState, BestScore) :-
     m_best(States, State2, Score2),
     m_better_of_two(State1, Score1, State2, Score2, BestState, BestScore).
 
-m_simple_best([State], State, Score) :- 
+m_simple_best([State], State, Score) :-
     m_score_state(State, Score), !.
 
 m_simple_best([State1 | States], BestState, BestScore) :-
@@ -115,6 +115,6 @@ m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
     Score0 > Score1, !.
 
 m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
-    Score0 < Score1, !. 
+    Score0 < Score1, !.
 
 m_better_of_two(_, _, State1, Score1, State1, Score1).
