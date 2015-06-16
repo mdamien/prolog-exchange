@@ -213,6 +213,11 @@ Dans le cadre des TP de l'UV IA02, nous devons implémenter une version Prolog d
 \chapter{Principaux prédicats}
 \section{Gestion du plateau}
 \subsection{Affichage}
+Pour l'affichage, le code est plutot simple. Nous avons même put utiliser des codes ANSI afin de rendre le résultat attractif.
+\begin{center}
+\includegraphics[height=3cm]{screen.png}\\
+\vspace{2.5cm}
+L'affichage inclue le score des joueurs et indique la position du trader sur les tas en plus des basiques.
 \subsection{Génération du plateau}
 En début de partie il faut générer les différentes structures qui composent un plateau. On crée donc un prédicat retournant un nouveau plateau.\\
 Le prédicat va générer l'ensemble des piles en formant une liste, contenant des sous-listes de 4 éléments. Pour générer ces sous-listes, on tire un nombre au hasard, correspondant à l'indice d'un élément dans une grande liste contenant tout les jetons du jeu.
