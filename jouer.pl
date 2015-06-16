@@ -10,6 +10,12 @@
 entrer_nombre(X):-read(X),number(X),X > -1,X < 4,!.
 entrer_nombre(X):-write('Déplacement invalide, re-essaye: '),entrer_nombre(X).
 
+choix_fait_avec_nombre(1, C, _,C).
+choix_fait_avec_nombre(_, _, C,C).
+
+entrer_choix(C1, C2, C):-read(X),number(X),X > 0,X < 3,choix_fait_avec_nombre(X, C1,C2,C),!.
+entrer_choix(C1, C2, C):-write('Choix invalide, re-essaye: '),entrer_choix(C1,C2,C).
+
 joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
@@ -86,7 +92,7 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
 
     cls,affiche_plateau([M, B, Trader, RJ1, RJ2]),
 
-    write('TOUR DE '),write(J),write(' [Humain] -T'),write(TourNumber),write('-'),nl,
+    bold('TOUR DE '),bold(J),bold(' [Humain] -T'),bold(TourNumber),bold('-'),nl,
 
     write('Avancer de combien ? '),
     entrer_nombre(Depl),
@@ -95,14 +101,15 @@ tour(J,[M, B, Trader, RJ1, RJ2], J1role, J2role, TourNumber):-
 
     choix(M, TraderPred, Choix1,Choix2),
     cls,affiche_plateau([M, B, TraderPred, RJ1, RJ2]),
-    write('TOUR DE '),write(J),write(' [Humain] -T'),write(TourNumber),write('-'),nl,
+
+    bold('TOUR DE '),bold(J),bold(' [Humain] -T'),bold(TourNumber),bold('-'),nl,
     write('Que prendre entre '),
-    write(Choix1),
+    write(Choix1),red('(1)'),
     write(' et '),
-    write(Choix2),
+    write(Choix2),red('(2)'),
     write(' ? '),
 
-    read(Choix),
+    entrer_choix(Choix1, Choix2, Choix),
     choix_fait(Choix1,Choix2,Choix, ChoixDrop),
     write(J),write('prend '),write(Choix),nl,
     jouer_coup([M, B, Trader, RJ1, RJ2], [J,Depl,Choix,ChoixDrop], NouveauPlateau),
