@@ -6,6 +6,7 @@
 :- include(gen).
 :- include(coup).
 :- include(ai).
+:- include(tools).
 
 entrer_nombre(X):-read(X),number(X),X > -1,X < 4,!.
 entrer_nombre(X):-write('Déplacement invalide, re-essaye: '),entrer_nombre(X).
@@ -19,7 +20,7 @@ entrer_choix(C1, C2, C):-write('Choix invalide, re-essaye: '),entrer_choix(C1,C2
 joueur_suivant('j1','j2').
 joueur_suivant('j2','j1').
 
-%cls :- put(27),write('[2J'). 
+%cls :- put(27),write('[2J').
 cls :- nl,write('-------'),nl,nl.
 
 jouer:-
