@@ -46,3 +46,34 @@ ai_simple_best(Plateau, Coup, J) :-
     coups_possibles(Plateau, CoupsPossibles),
     meilleur_coup(Plateau, CoupsPossibles, J, Coup, _),!
 .
+
+
+ai_minimax(Plateau, J, Coup) :-
+    write('ai minimax réfléchie!'),nl
+.
+
+%State = [Plateau, Joueur, Profondeur, JoueurAMaximiser]
+minimax(State, BestNextState, Score) :-
+    m_next_states(State, NextStates),
+    m_best(NextStates, BestNextState, Score), !.
+
+minimax(State, _, Score) :-
+    m_score_state(State, Score).
+
+m_best([State], State, Score) :- 
+    minimax(State, _, Score), !.
+
+m_best([State1 | States], BestState, BestScore) :-
+    minimax(State1, _, Score1),
+    m_best(StateList, State2, Score2),
+    m_better_of_two(State1, Score1, State2, Score2, BestState, BestScore).
+
+m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
+    m_min_to_move(State0),
+    Score0 > Score1, !.
+
+m_better_of_two(State0, Score0, _, Score1, State0, Score0) :-
+    m_max_to_move(State0), 
+    Score0 < Score1, !. 
+
+m_better_of_two(_, _, State1, Score1, State1, Score1).
