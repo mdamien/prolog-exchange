@@ -83,7 +83,7 @@ m_score_state([Plateau, _, Joueur, _], Score):-
 %State = [Plateau, CoupJoue, Joueur, Profondeur]
 
 minimax([Plateau, CoupJoue, Joueur, Profondeur], BestNextState, Score) :-
-    Profondeur > 1,
+    Profondeur > 3,
     m_next_states([Plateau, CoupJoue, Joueur, Profondeur], NextStates),
     m_simple_best(NextStates, BestNextState, Score), !.
 
